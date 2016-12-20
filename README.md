@@ -19,10 +19,10 @@ The build does the following:
 * disable hibernate
 * setup timezone
 * perform windows cleanup
-** cleanup WinSxS based on [this article](https://blogs.technet.microsoft.com/askpfeplat/2015/02/09/how-to-reduce-the-size-of-the-winsxs-directory-and-free-up-disk-space-on-windows-server-2012-r2-and-windows-8-1-or-do-we-even-need-to/)
-** remove temporary directories
-** optimize c:
-** use sdelete to optimize vdi size based on [this article](http://superuser.com/questions/529149/how-to-compact-virtualboxs-vdi-file-size)
+  * cleanup WinSxS based on [this article](https://blogs.technet.microsoft.com/askpfeplat/2015/02/09/how-to-reduce-the-size-of-the-winsxs-directory-and-free-up-disk-space-on-windows-server-2012-r2-and-windows-8-1-or-do-we-even-need-to/)
+  * remove temporary directories
+  * optimize c:
+  * use sdelete to optimize vdi size based on [this article](http://superuser.com/questions/529149/how-to-compact-virtualboxs-vdi-file-size)
 
 ##Requirements
 * window10 iso file. It can be downloaded from microsoft site, but rather tricky to find. I'm using this [repository](https://github.com/boxcutter/windows) as a reference. There are a lot of packer files there with direct donwload links.
