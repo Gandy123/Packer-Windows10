@@ -1,0 +1,1 @@
+choco install visualstudio2012community --execution-timeout=15400

@@ -1,0 +1,1 @@
+choco install visualstudio2015community --execution-timeout=15400

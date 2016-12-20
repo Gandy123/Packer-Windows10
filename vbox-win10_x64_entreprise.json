@@ -1,0 +1,82 @@
+{
+    "builders": [{
+    "type": "virtualbox-iso",
+    "vboxmanage": [
+      [ "modifyvm", "{{.Name}}", "--natpf1", "winrm,tcp,,55985,,5985" ],
+      [ "modifyvm", "{{.Name}}", "--memory", "5120" ],
+      [ "modifyvm", "{{.Name}}", "--vram", "36" ],
+      [ "modifyvm", "{{.Name}}", "--cpus", "2" ]
+    ],
+    "guest_os_type": "Windows10_64",
+    "iso_url": "{{ user `iso_url` }}",
+    "iso_checksum": "{{ user `iso_checksum` }}",
+    "iso_checksum_type": "sha1",
+    "communicator": "winrm",
+    "headless": "{{ user `headless` }}",    
+    "winrm_username": "vagrant",
+    "winrm_password": "vagrant",
+    "winrm_timeout": "24h",
+    "shutdown_command": "{{ user `shutdown_command`}}",
+    "post_shutdown_delay": "1m",
+    "shutdown_timeout": "1m",
+    "disk_size": "200000",
+    "floppy_files": [
+      "answer_files/Autounattend.xml",
+      "scripts/install_windows_updates.ps1",
+      "scripts/setup_winrm.ps1"
+    ],
+    "guest_additions_mode": "attach"    
+  }],
+  "provisioners": [
+  	{
+  		"type": "windows-restart",
+  		"restart_timeout": "24h"
+  	},  	
+    {
+      "type": "powershell",
+	    "execute_command": "powershell -ExecutionPolicy Bypass \"& { {{.Vars}}{{.Path}}; exit $LastExitCode}\"",      
+      "scripts": [
+      	"scripts/install_chocolatey.ps1",
+      	"scripts/install_packages.ps1"
+      ]
+    },
+  	{
+  		"type": "windows-restart",
+  		"restart_timeout": "24h"
+  	},
+    {
+      "type": "powershell",
+      "execute_command": "powershell -ExecutionPolicy Bypass \"& { {{.Vars}}{{.Path}}; exit $LastExitCode}\"",      
+      "script": "scripts/install_guestadditions.ps1"
+    },
+    {
+      "type": "windows-restart",
+      "restart_timeout": "24h"
+    },
+    {
+      "type": "powershell",
+	    "execute_command": "powershell -ExecutionPolicy Bypass \"& { {{.Vars}}{{.Path}}; exit $LastExitCode}\"",      
+      "scripts": [
+      	"scripts/enable_rdp.ps1",     
+        "scripts/enable_uac.ps1", 	
+      	"scripts/disable_hibernate.ps1",
+      	"scripts/setup_timezone.ps1",
+      	"scripts/cleanup.ps1"
+      ]
+    }    
+  ],  
+    "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": true,
+      "output": "windows10-{{.Provider}}.box",
+      "vagrantfile_template": "vagrantfile-windows.template"
+    }
+  ],
+  "variables": {
+    "headless": "false",
+    "iso_checksum": "56ab095075be28a90bc0b510835280975c6bb2ce",
+    "iso_url": "iso/en_windows10_enterprise.iso",
+	"shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\""
+  }
+}
