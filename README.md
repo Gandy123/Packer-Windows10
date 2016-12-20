@@ -10,7 +10,9 @@ The build does the following:
 * install windows updates (using scripts/install_windows_updates.ps1). The script is called in Autounattend.xml file while packer installing windows. I've tried to call it withing packer provision but failed
 * enable winrm (using scripts/setup_winrm.ps1). The script is also called in Autounattend.xml. It seems that for now this is a most convinient way to enable packer connection with a setup machine
 * restart windows through packer provisioner
-* install chocolatey and nodejs
+* install chocolatey
+* install nodejs
+* install windows server 2003 resource kit tools - I'm using ntrights from this package to allow services run as a user during further vagrant provisioning
 * restart windows
 * install guestadditions
 * restart windows
